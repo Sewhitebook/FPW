@@ -6,7 +6,7 @@ import numpy
 extensions = [
     Extension(
         "fpw",
-        ["fpw.pyx", "../src/fpw.cpp"],  # Add fpw.cpp here
+        ["fpw.pyx", "../src/fpw.cpp"],
         include_dirs=[numpy.get_include(), '../eigen', '../src'],
         language="c++"
     )
