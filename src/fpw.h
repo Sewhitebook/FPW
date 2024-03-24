@@ -2,7 +2,7 @@
 #define FPW_H
 
 #include <vector>
-#include <Eigen/Dense>
+#include "Eigen/Dense"
 
 using Eigen::VectorXd;
 using Eigen::VectorXi;
