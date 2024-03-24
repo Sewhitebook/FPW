@@ -1,3 +1,0 @@
-/home/swhitebook/github/FPW/build/CMakeFiles/rebuild_cache.dir
-/home/swhitebook/github/FPW/build/CMakeFiles/edit_cache.dir
-/home/swhitebook/github/FPW/build/CMakeFiles/FPW.dir

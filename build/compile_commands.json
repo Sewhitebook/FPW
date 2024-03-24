@@ -1,7 +1,0 @@
-[
-{
-  "directory": "/home/swhitebook/github/FPW/build",
-  "command": "/usr/bin/g++-9  -I/home/swhitebook/github/FPW/eigen  -O3 -O3 -DNDEBUG -std=gnu++14 -o CMakeFiles/FPW.dir/src/fpw.cpp.o -c /home/swhitebook/github/FPW/src/fpw.cpp",
-  "file": "/home/swhitebook/github/FPW/src/fpw.cpp"
-}
-]

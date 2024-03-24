@@ -1,1 +1,0 @@
-/usr/bin/g++-9  -O3 -O3 -DNDEBUG CMakeFiles/FPW.dir/src/fpw.cpp.o -o FPW 
