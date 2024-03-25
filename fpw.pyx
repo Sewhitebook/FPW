@@ -1,5 +1,5 @@
 # distutils: language = c++
-# distutils: sources = ../src/fpw.cpp
+# distutils: sources = src/fpw.cpp
 
 import numpy as np
 cimport numpy as cnp

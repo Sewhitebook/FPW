@@ -31,19 +31,6 @@ double deltaChi2(const VectorXd& y, const VectorXd& ivar, const VectorXi& ind, i
     return deltaChi;
 }
 
-VectorXd runFPW(const VectorXd& t, const VectorXd& y, const VectorXd& ivar, const VectorXd& freqs, int N_bins){
-    int N_freqs = freqs.size();
-    int N_dat = t.size();
-
-    VectorXd deltaChiArr = VectorXd::Zero(N_freqs);
-    for (int i = 0; i < N_freqs; ++i){
-        VectorXi indices = makeIndices(t, freqs[i], N_bins);
-        deltaChiArr[i] = deltaChi2(y, ivar, indices, N_bins, N_dat);
-    }
-
-    return deltaChiArr;
-}
-
 vector<double> runFPW(const vector<double>& t, const vector<double>& y, const vector<double>& ivar, const vector<double>& freqs, int N_bins){
     VectorXd t_eigen = VectorXd::Map(t.data(), t.size());
     VectorXd y_eigen = VectorXd::Map(y.data(), y.size());
