@@ -5,8 +5,6 @@ import numpy
 import sys
 
 extra_compile_args = ["-O3", "-DNDEBUG"]
-if sys.platform == "darwin":  # macOS
-    extra_compile_args += ["-std=c++11", "-Wno-nullability-completeness"]
 
 extensions = [
     Extension(
