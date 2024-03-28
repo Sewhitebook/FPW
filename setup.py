@@ -4,7 +4,7 @@ from Cython.Build import cythonize
 import numpy
 import sys
 
-extra_compile_args = ["-O3", "-DNDEBUG"]
+extra_compile_args = ["-O3", "-DNDEBUG", "-std=c++14"]
 
 extensions = [
     Extension(
