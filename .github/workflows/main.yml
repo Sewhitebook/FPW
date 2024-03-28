@@ -20,7 +20,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install glibc
-        run: sudo apt-get update && sudo apt-get install -y glibc-source
+        run: sudo apt-get update && sudo apt-get install -y libc6-dev
         if: runner.os == 'Linux'
 
       - name: Install cibuildwheel
