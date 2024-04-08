@@ -48,3 +48,31 @@ vector<double> runFPW(const vector<double>& t, const vector<double>& y, const ve
 
     return deltaChiArr;
 }
+
+MatrixXd runBatchFPW(const vector<double>& t, const MatrixXd& y, const MatrixXd& ivar, const vector<double>& freqs, int N_bins){
+    VectorXd t_eigen = VectorXd::Map(t.data(), t.size());
+    VectorXd freqs_eigen = VectorXd::Map(freqs.data(), freqs.size());
+
+    int N_freqs = freqs_eigen.size();
+    int N_dat = t_eigen.size();
+    int N_series = y.rows();
+
+    MatrixXi indices(N_freqs, N_dat);
+    for (int i = 0; i < N_series; ++i){
+        for (int j = 0; i < N_freqs; ++i){
+            VectorXi indices_i = makeIndices(t_eigen, freqs_eigen[i], N_bins);
+            indices.row(i) = indices_i;
+        }
+    }
+
+    MatrixXd deltaChiArr(N_series, N_freqs);
+    for (int i = 0; i < N_series; ++i){
+        VectorXd y_eigen = y.row(i);
+        VectorXd ivar_eigen = ivar.row(i);
+        for (int j = 0; j < N_freqs; ++j){
+            deltaChiArr(i, j) = deltaChi2(y_eigen, ivar_eigen, indices[j], N_bins, N_dat);
+        }
+    }
+
+    return deltaChiArr;
+}

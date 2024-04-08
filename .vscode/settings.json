@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "*.rmd": "markdown",
-        "vector": "cpp"
+        "vector": "cpp",
+        "*.inc": "cpp"
     }
 }
