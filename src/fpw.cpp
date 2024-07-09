@@ -1,5 +1,6 @@
 #include "fpw.h"
 
+/*Given N phase bins, makeIndices maps the bin index that each timestamp falls in*/
 int* makeIndices(double* times, const double f, const int N_bins, const int size){
     int* indices = new int[size];
 
@@ -58,33 +59,25 @@ vector<double> runFPW(vector<double>& t, vector<double>& y, vector<double>& dy, 
     return deltaChiArr;
 }
 
+vector<vector<double>> runFPWMulti(vector<double>& t, vector<vector<double>>& y, vector<vector<double>>& dy, const vector<double>& freqs, int N_bins){
+    int N_freqs = freqs.size();
+    int N_dat = t.size();
+    int N_curves = y.size();
 
-/* Setting up the batch function*/
+    vector<vector<double>> ivar(N_curves, vector<double>(N_dat));
+    for (int j = 0; j < N_curves; ++j){
+        for (int i = 0; i < N_dat; ++i){
+            ivar[j][i] = 1.0 / (dy[j][i] * dy[j][i]);
+        }
+    }
 
-// MatrixXd runBatchFPW(const vector<double>& t, const MatrixXd& y, const MatrixXd& ivar, const vector<double>& freqs, int N_bins){
-//     VectorXd t_eigen = VectorXd::Map(t.data(), t.size());
-//     VectorXd freqs_eigen = VectorXd::Map(freqs.data(), freqs.size());
-
-//     int N_freqs = freqs_eigen.size();
-//     int N_dat = t_eigen.size();
-//     int N_series = y.rows();
-
-//     MatrixXi indices(N_freqs, N_dat);
-//     for (int i = 0; i < N_series; ++i){
-//         for (int j = 0; i < N_freqs; ++i){
-//             VectorXi indices_i = makeIndices(t_eigen, freqs_eigen[i], N_bins);
-//             indices.row(i) = indices_i;
-//         }
-//     }
-
-//     MatrixXd deltaChiArr(N_series, N_freqs);
-//     for (int i = 0; i < N_series; ++i){
-//         VectorXd y_eigen = y.row(i);
-//         VectorXd ivar_eigen = ivar.row(i);
-//         for (int j = 0; j < N_freqs; ++j){
-//             deltaChiArr(i, j) = deltaChi2(y_eigen, ivar_eigen, indices[j], N_bins, N_dat);
-//         }
-//     }
-
-//     return deltaChiArr;
-// }
+    vector<vector<double>> deltaChiArr(N_curves, vector<double>(N_freqs));
+    for (int i = 0; i < N_freqs; ++i){
+        int* indices = makeIndices(t.data(), freqs[i], N_bins, N_dat);
+        for (int j = 0; j < N_curves; ++j){
+            deltaChiArr[j][i] = deltaChi2(y[j].data(), ivar[j].data(), indices, N_bins, N_dat);
+        }
+        delete[] indices;
+    }
+    return deltaChiArr;
+}
