@@ -1,7 +1,6 @@
 name: Build and Publish
 
 on:
-
   release:
     types: [created]  # Runs when a new release is created
   workflow_dispatch:  # Allows manual triggering of the workflow
@@ -46,8 +45,11 @@ jobs:
   publish:
     name: Publish to PyPI
     needs: build_wheels  # Waits for the build_wheels job to complete
-    if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
       - name: Checkout code
@@ -66,7 +68,7 @@ jobs:
       - name: Download built wheels
         uses: actions/download-artifact@v4
         with:
-          name: wheels-${{ github.run_id }}-ubuntu-latest
+          name: wheels-${{ github.run_id }}-${{ matrix.os }}
           path: dist
 
       - name: Publish to PyPI
