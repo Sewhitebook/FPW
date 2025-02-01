@@ -1,6 +1,10 @@
-name: Build
+name: Build and Publish
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  release:
+    types: [created]  # Runs when a new release is created
 
 jobs:
   build_wheels:
@@ -12,14 +16,14 @@ jobs:
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
-      - name: Install glibc
+      - name: Install glibc (Linux only)
         run: sudo apt-get update && sudo apt-get install -y libc6-dev
         if: runner.os == 'Linux'
 
@@ -34,20 +38,17 @@ jobs:
           CIBW_ENVIRONMENT: "CXXFLAGS=-std=c++17"
 
       - name: Upload wheels as artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: wheels
           path: ./wheelhouse/*.whl
 
-name: Publish to PyPI
-
-on:
-  release:
-    types: [created]  # Runs when a new release is created
-
-jobs:
-  build:
+  publish:
+    name: Publish to PyPI
+    needs: build_wheels  # Waits for the build_wheels job to complete
+    if: github.event_name == 'release'  # Only runs on a release
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -62,11 +63,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install build twine
 
-      - name: Build package
-        run: python -m build
+      - name: Download built wheels
+        uses: actions/download-artifact@v4
+        with:
+          name: wheels
+          path: dist
 
       - name: Publish to PyPI
         env:
           TWINE_USERNAME: "__token__"
           TWINE_PASSWORD: "${{ secrets.PYPI_API_TOKEN }}"
         run: twine upload dist/*
+
