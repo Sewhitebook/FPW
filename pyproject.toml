@@ -1,3 +1,7 @@
+[project]
+name = "fpwperiodic"
+version = "0.0.0"
+
 [build-system]
 requires = [
     "setuptools>=42",
