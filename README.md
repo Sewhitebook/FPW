@@ -38,7 +38,7 @@ If you'd like to contribute to FPW, feel free to submit a pull request or open a
 This project is licensed under the MIT License.
 
 ## Related Paper
-For more details, please refer to our published paper: [Finkbeiner et al. 2025](https://doi.org/10.48550/arXiv.2502.00243).
+If you use FPW in your research please consider citing our paper: [Finkbeiner et al. 2025](https://doi.org/10.48550/arXiv.2502.00243).
 
 ## Contact
 For questions or issues, please open a GitHub issue or reach out to the maintainers.
