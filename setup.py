@@ -10,7 +10,6 @@ extensions = [
     Extension(
         "fpw",
         ["fpw.pyx", "src/fpw.cpp"],  # Keep the relative path to fpw.cpp
-        # include_dirs=[numpy.get_include(), 'include/eigen', 'src'],
         include_dirs=[numpy.get_include(), 'src'],
         language="c++",
         extra_compile_args=extra_compile_args,
@@ -19,6 +18,7 @@ extensions = [
 
 setup(
     name="fpw",
+    version="1.0.1",
     ext_modules=cythonize(extensions),
     install_requires=[
         'numpy',
