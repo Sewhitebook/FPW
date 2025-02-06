@@ -21,7 +21,7 @@ setup(
     name="fpw",
     version="1.0.1",
     description="Fast waveform agnostic period finding algorithm'",
-    author="Samuel Whitebook"
+    author="Samuel Whitebook",
     ext_modules=cythonize(extensions),
     install_requires=[
         'numpy',
