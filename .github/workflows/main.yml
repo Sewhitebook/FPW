@@ -1,49 +1,95 @@
+name: Build:
+
+```yaml
 name: Build and Publish
+
+on and Publish
 
 on:
   release:
-    types: [created]  # Runs when a new release is created
-  workflow_dispatch:  # Allows manual triggering of the workflow
+    types: [created] :
+  release:
+    types: [created]  # Runs when a new # Runs when a new release is created
+  workflow_dispatch: release is created
+  workflow_dispatch:  # Allows manual  # Allows manual triggering of the workflow
+
+jobs:
+ triggering of the workflow
 
 jobs:
   build_wheels:
-    name: Build wheels on ${{ matrix.os }}
+  build_wheels:
+    name: Build wheels on ${{ matrix    name: Build wheels on ${{ matrix.os }}
+    runs.os }}
     runs-on: ${{ matrix.os }}
     strategy:
+     -on: ${{ matrix.os }}
+    strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        matrix:
+        os: [ubuntu-latest, windows-l os: [ubuntu-latest, windows-latest, macos-latestatest, macos-latest]
+
+    steps:
+      - name: Check out code]
 
     steps:
       - name: Check out code
+        uses
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: actions/checkout@v4
+
+      - name: Set up Python: Set up Python
+        uses: actions/setup-python@
         uses: actions/setup-python@v4
+        withv4
         with:
           python-version: '3.13'
 
       - name: Install glibc (Linux only)
+       :
+          python-version: '3.13'
+
+      - name: Install run: sudo apt-get update && sudo apt-get install - glibc (Linux only)
         run: sudo apt-get update && sudo apt-get install -y libc6-dev
+        if:y libc6-dev
         if: runner.os == 'Linux'
+
+      - name: Install cibuildwheel
+        run: python -m pip runner.os == 'Linux'
 
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel
 
+ install cibuildwheel
+
       - name: Build wheels
+             - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
         env:
-          CIBW_BUILD: "cp38-* cp39-* cp310-* cp311-* cp312-* cp313-*"
-          CIBW_SKIP: "*-win32 *-manylinux_i686 *-manylinux1_i686"
-          CIBW_ENVIRONMENT: "CXXFLAGS=-std=c++17"
+          run: python -m cibuildwheel --output-dir wheelhouse
+        env:
+          CIBW_BUILD: "cp38-* cp39 CIBW_BUILD: "cp38-* cp39-* cp310-* cp311-* cp-* cp310-* cp311-* cp312-* cp313-*"
+          CIBW_SKIP312-* cp313-*"
+          CIBW_SKIP: "*-win32 *-many: "*-win32 *-manylinux_i686 *-manylinux1_i686"
+linux_i686 *-manylinux1_i686"
+          CIBW_ENVIRONMENT:          CIBW_ENVIRONMENT: "CXXFLAGS=-std=c++17"
 
       - name: Rename wheels with release version
-        run: |
+ "CXXFLAGS=-std=c++17"
+
+      - name: Rename wheels with release version
+        shell: bash
+        run        run: |
+          $wheels = Get-ChildItem -Path ./: |
           for file in ./wheelhouse/*.whl; do
-            newfile=$(echo $file | sed "s/\(.*\)\(\.whl\)/\1-${{ github.event.release.tag_name }}\2/")
+           wheelhouse/*.whl
+          foreach ($wheel in $wheels) {
+ newfile=$(echo $file | sed "s/\(.*\)\(\.whl\)/\1-${{ github.event.release.tag_name }}\2/")
             mv "$file" "$newfile"
           done
 
-      - name: Upload wheels as artifacts
+            $newName = $wheel.FullName      - name: Upload wheels as artifacts
         uses: actions/upload-artifact@v4
         with:
           name: wheels-${{ github.event.release.tag_name }}-${{ matrix.os }}
@@ -75,11 +121,19 @@ jobs:
       - name: Download built wheels
         uses: actions/download-artifact@v4
         with:
-          name: wheels-${{ github.event.release.tag_name }}-${{ matrix.os }}
+          name: wheels-${{ github.event.release.tag -replace "(.+)(\.whl)", "`$1-${{ github.event.release.tag_name }}$2"
+            Rename-Item -Path $wheel.FullName -NewName $newName
+          }
+        shell:_name }}-${{ matrix.os }}
           path: dist
 
-      - name: Publish to PyPI
+ pwsh
+
+      - name: Upload wheels as artifacts
+        uses      - name: Publish to PyPI
         env:
           TWINE_USERNAME: "__token__"
-          TWINE_PASSWORD: "${{ secrets.PYPI_API_TOKEN }}"
+          TWINE_PASSWORD: "${: actions/upload-artifact@v4
+        with:
+          name{ secrets.PYPI_API_TOKEN }}"
         run: twine upload dist/* --repository-url https://upload.pypi.org/legacy/
