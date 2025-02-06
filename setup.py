@@ -2,7 +2,11 @@ from setuptools import setup
 from setuptools.extension import Extension
 from Cython.Build import cythonize
 import numpy
+import os
 import sys
+
+# Get version from the environment variable passed by GitHub Actions
+version = os.getenv('PACKAGE_VERSION', '0.0.0')  # Default to 0.0.0 if not set
 
 extra_compile_args = ["-O3", "-DNDEBUG", "-std=c++17"]
 
@@ -18,9 +22,10 @@ extensions = [
 
 setup(
     name="fpw",
-    version="1.0.1",
+    version=version,  # Use the dynamic version here
     ext_modules=cythonize(extensions),
     install_requires=[
         'numpy',
     ],
 )
+
