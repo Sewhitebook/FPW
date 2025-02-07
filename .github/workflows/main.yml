@@ -20,7 +20,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: '3.x'
 
       - name: Install glibc (Linux only)
         run: sudo apt-get update && sudo apt-get install -y libc6-dev
@@ -28,14 +28,6 @@ jobs:
 
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel
-
-      - name: Update version in setup.py
-        run: |
-          VERSION="${{ github.event.release.tag_name }}"
-          echo "Updating version to $VERSION in setup.py"
-          sed -i "s/version=\".*\"/version=\"$VERSION\"/" setup.py
-        env:
-          VERSION: ${{ github.event.release.tag_name }}  # Explicitly pass release tag version
 
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
@@ -54,6 +46,10 @@ jobs:
     name: Publish to PyPI
     needs: build_wheels  # Waits for the build_wheels job to complete
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
       - name: Checkout code
