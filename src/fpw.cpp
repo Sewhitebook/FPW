@@ -133,3 +133,42 @@ vector<vector<double>> runFPWMulti(vector<double>& t, vector<vector<double>>& y,
     }
     return deltaChiArr;
 }
+
+/**
+ * @brief Computes a phase entropy statistic for each test frequency.
+ * 
+ * This function calculates the phase entropy as seen in Finkbeiner et al. 2025. This is useful for finding frequencies of high systematic noise.
+ * 
+ * @param t Vector of time points.
+ * @param freqs Vector of test frequencies.
+ * @param N_bins Number of phase bins.
+ * @return Vector of computed phase entropy statistics for each frequency.
+ */
+vector<double> phaseEntropy(vector<double>& t, const vector<double>& freqs, int N_bins){
+
+    int N_freqs = freqs.size();
+    int N_dat = t.size();
+
+    vector<double> entropyArr(N_freqs);
+    for (int i = 0; i < N_freqs; ++i){
+        int* indices = makeIndices(t.data(), freqs[i], N_bins, N_dat);
+
+        vector<int> binCounts(N_bins, 0);
+        for (int j = 0; j < N_dat; ++j){
+            binCounts[indices[j]] += 1;
+        }
+
+        double entropy = 0.0;
+        for (int k = 0; k < N_bins; ++k){
+            if (binCounts[k] > 0){
+                double p = static_cast<double>(binCounts[k]) / static_cast<double>(N_dat);
+                entropy -= p * log(p);
+            }
+        }
+        entropyArr[i] = entropy;
+
+        delete[] indices;
+    }
+    return entropyArr;
+}
+

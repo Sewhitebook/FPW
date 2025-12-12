@@ -8,6 +8,7 @@ from libcpp.vector cimport vector
 cdef extern from "fpw.h":
     vector[double] runFPW(vector[double]& t, vector[double]& y, vector[double]& dy, vector[double]& freqs, int N_bins)
     vector[vector[double]] runFPWMulti(vector[double]& t, vector[vector[double]]& y, vector[vector[double]]& dy, vector[double]& freqs, int N_bins)
+    vector[double] phaseEntropy(vector[double]& t, vector[double]& freqs, int N_bins)
 
 def run_fpw(cnp.ndarray[double, ndim=1, mode="c"] t, cnp.ndarray[double, ndim=1, mode="c"] y, cnp.ndarray[double, ndim=1, mode="c"] dy, cnp.ndarray[double, ndim=1, mode="c"] freqs, int N_bins):
     cdef vector[double] t_vec = <vector[double]&>t
@@ -34,3 +35,11 @@ def run_fpw_multi(cnp.ndarray[double, ndim=1, mode="c"] t, cnp.ndarray[double, n
 
     # Convert the C++ vector of vectors to a numpy array
     return np.array([[result[i][j] for j in range(len(result[i]))] for i in range(len(result))])
+
+def phase_entropy(cnp.ndarray[double, ndim=1, mode="c"] t, cnp.ndarray[double, ndim=1, mode="c"] freqs, int N_bins):
+    cdef vector[double] t_vec = <vector[double]&>t
+    cdef vector[double] freqs_vec = <vector[double]&>freqs
+
+    cdef vector[double] result = phaseEntropy(t_vec, freqs_vec, N_bins)
+
+    return np.array(result)
