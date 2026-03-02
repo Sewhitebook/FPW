@@ -19,7 +19,7 @@ extensions = [
 
 setup(
     name="fpw",
-    version="1.1.0",
+    version="1.1.1",
     description="Fast waveform agnostic period finding algorithm'",
     author="Samuel Whitebook",
     ext_modules=cythonize(extensions),

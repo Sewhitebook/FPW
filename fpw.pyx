@@ -24,6 +24,7 @@ def run_fpw(t, y, dy, freqs, int N_bins):
     if not (t_arr.shape[0] == y_arr.shape[0] == dy_arr.shape[0]):
         raise ValueError("t, y, and dy must have the same length")
 
+    t_arr = t_arr - np.min(t_arr) #Require t to start at 0
     t = np.ascontiguousarray(t_arr)
     y = np.ascontiguousarray(y_arr)
     dy = np.ascontiguousarray(dy_arr)
@@ -56,6 +57,7 @@ def run_fpw_multi(t, y, dy, freqs, int N_bins):
     if f_arr.ndim != 1:
         raise ValueError("freqs must be 1D")
 
+    t_arr = t_arr - np.min(t_arr) #Require t to start at 0
     t = np.ascontiguousarray(t_arr)
     y = np.ascontiguousarray(y_arr)
     dy = np.ascontiguousarray(dy_arr)
@@ -78,6 +80,7 @@ def phase_entropy(t, freqs, int N_bins):
     if t_arr.ndim != 1 or f_arr.ndim != 1:
         raise ValueError("t and freqs must be 1D arrays")
 
+    t_arr = t_arr - np.min(t_arr) #Require t to start at 0
     t = np.ascontiguousarray(t_arr)
     freqs = np.ascontiguousarray(f_arr)
 
